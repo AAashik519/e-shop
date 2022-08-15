@@ -1,8 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import {client ,urlFor} from '../../lib/client'
 import { AiOutlineMinus, AiOutlinePlus,AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { Product } from "../../components";
+
+import {useStateContext} from '../../context/StateContext'
+
+
+
 const ProductDetails = ({product,products}) => {
+    const [index, setIndex] = useState(0)
     const {image,name,details,price} =product
   return (
 
@@ -10,17 +16,18 @@ const ProductDetails = ({product,products}) => {
       <div className="product-detail-container">
         <div>
           <div className="image-container">
-                <img src={urlFor(image && image[0])} alt="" />
+                <img src={urlFor(image && image[index])} className='product-detail-image' alt="" />
           </div>
 
-          {/* <div className="small-images-container">
+          <div className="small-images-container">
                {image?.map((item,i)=>(
                 <img
                     src={urlFor(item)}
-                    className
+                    className={i===index ? 'small-image selected-image' : 'small-image'}
+                    onMouseEnter={()=>setIndex(i)}
                 />
                ))}
-          </div> */}
+          </div>
         </div>
 
           <div className="product-detail-desc">
@@ -62,9 +69,6 @@ const ProductDetails = ({product,products}) => {
                     </div>
                 </div>
           </div>
-
-
-
 
     </div>
   );
