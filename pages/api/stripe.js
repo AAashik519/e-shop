@@ -1,22 +1,23 @@
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+    console.log(req.body.cartItems)
     try {
-      const params = {
-        submit_type: 'pay',
-        mode: 'payment',
-        payment_method_types: ['card'],
-        billing_address_collection: 'auto',
-        shipping_options: [
-            { shipping_rate:'shr_1LiQPwAEoLbRUdQlTz4UiDuQ', },
+      // Create Checkout Sessions from body params.
+      const params ={
+        submit_type:'pay',
+        mode:'payment',
+        payment_method_types:['card'],
+        billing_address_collection:'auto',
+        shipping_options:[
+          {shipping_rate:'shr_1LiQPwAEoLbRUdQlTz4UiDuQ'},
+          {shipping_rate:'shr_1LiQRJAEoLbRUdQlntQvRVtY'},
         ],
-        line_items: req.body.map((item) => {
+        line_items:req.body.map((item)=>{
           const img = item.image[0].asset._ref;
           const newImage = img.replace('image-', 'https://cdn.sanity.io/images/t8ifejzg/production/').replace('-webp', '.webp');
-
+           
           return {
             price_data: { 
               currency: 'usd',
@@ -33,14 +34,13 @@ export default async function handler(req, res) {
             quantity: item.quantity
           }
         }),
-        success_url: `${req.headers.origin}/success`,
-        cancel_url: `${req.headers.origin}/canceled`,
+       
+        success_url: `${req.headers.origin}/?success=true`,
+        cancel_url: `${req.headers.origin}/?canceled=true`,
       }
 
-      // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create(params);
-
-      res.status(200).json(session);
+      res.status(200).json(session)
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
     }
@@ -49,17 +49,3 @@ export default async function handler(req, res) {
     res.status(405).end('Method Not Allowed');
   }
 }
-
-
-// submit_type :'pay',
-//             mode :'payment',
-//             payment_method_types:['card'],
-//             billing_address_collection :'auto',
-//             shipping_options:[
-//                 { shipping_rate:'shr_1LiQPwAEoLbRUdQlTz4UiDuQ', },
-//                 { shipping_rate:'shr_1LiQRJAEoLbRUdQlntQvRVtY', },
-//             ],
-            
-//             line_items: req.body.map((item) => {
-//                 const img = item.image[0].asset._ref;
-//                 const newImage = img.replace('image-', 'https://cdn.sanity.io/images/t8ifejzg/production/').replace('-webp', '.webp');
