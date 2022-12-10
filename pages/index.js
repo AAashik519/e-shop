@@ -20,6 +20,8 @@ const Home = ({ products, bannerData }) => (
 );
 
 
+ 
+
  export const getServerSideProps = async()=>{
    const query = '*[_type == "product"]' ;
   const products = await client.fetch(query);
@@ -30,7 +32,7 @@ const Home = ({ products, bannerData }) => (
   return {
     props :{
       products,
-      bannerData
+      bannerData,
     }
   }
  }

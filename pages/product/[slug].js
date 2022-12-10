@@ -56,7 +56,7 @@ const ProductDetails = ({product,products}) => {
 
             <div className="buttons">
                 <button className="add-to-cart" type="button" onClick={()=> onAdd(product,qty)}> Add to Cart   </button>
-                <button className="buy-now" type="button" onClick=''>Buy Now  </button>
+                {/* <button className="buy-now" type="button" onClick=''>Buy Now  </button> */}
             </div>
           </div>
       </div>

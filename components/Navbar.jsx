@@ -10,7 +10,7 @@ const Navbar = () => {
       <div className='n-header' >
       <p className='logo'>
           <Link href='/'>
-             Unique Headphones
+             Headphones
           </Link>
         </p> 
       </div>
@@ -19,14 +19,12 @@ const Navbar = () => {
             <li>
               <Link href="/">Home</Link>
             </li>
+          
             <li>
-              <Link href="product">products</Link>
+              <Link href="/login">Sign In</Link>
             </li>
             <li>
-              <Link href="Register">Login</Link>
-            </li>
-            <li>
-              <Link href="Login">Register</Link>
+              <Link href="/register">Sign Up</Link>
             </li>
           </ul>
         <button type='button' className='cart-icon' onClick={()=>setShowCart(true)}>
